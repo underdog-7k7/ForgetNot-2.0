@@ -21,10 +21,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.personal.animeshpandey.forgetnot20.Model.dummytasks
+import com.personal.animeshpandey.forgetnot20.ViewModel.TaskViewModel
 
 @Composable
-fun TaskView(){
+fun TaskView(
+    Task_ViewModel:TaskViewModel,
+    navcontroller:NavController)
+{
+
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier
             .fillMaxSize()
@@ -33,16 +40,17 @@ fun TaskView(){
             LazyColumn(){
                 items(dummytasks.listoftasks){
                         concernedtask->
-                    TaskItem(task = concernedtask)
-                    TaskItem(task = concernedtask)
-
+                    TaskItem(task = concernedtask,{})
                 }
             }
             FloatingActionButton(
                 modifier = Modifier
                     .align(alignment = Alignment.BottomEnd)
                     .padding(16.dp),
-                onClick = { /*TODO*/ },
+                onClick = {
+                          navcontroller.navigate(Screen.EditTaskScreen.route)
+                    //  Add Item Screen
+                },
                 backgroundColor = MaterialTheme.colorScheme.primaryContainer) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             }
@@ -55,5 +63,4 @@ fun TaskView(){
 @Preview(showBackground = true)
 @Composable
 fun tester2(){
-    TaskView()
 }
