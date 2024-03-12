@@ -3,6 +3,7 @@ package com.personal.animeshpandey.forgetnot20.Views
 import android.text.Layout
 import android.widget.TimePicker
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -32,6 +34,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,6 +55,7 @@ import com.personal.animeshpandey.forgetnot20.Utils_Helpers.time_formatter
 import java.time.LocalDate
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
+import com.personal.animeshpandey.forgetnot20.ViewModel.TaskViewModel
 
 @Composable
 fun TaskItem(task: Task,onEdit:()->Unit){
@@ -205,10 +209,71 @@ fun timePicker(){
     if(hours.length<2) hours = "0"+hours
     if(minutes.length<2) minutes = "0"+minutes
 
-    Row(modifier = Modifier.fillMaxWidth()){
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
         TimePicker(state = PickerState)
     }
 
+}
+
+@Composable
+fun priorityselector(viewModel: TaskViewModel){
+
+    var priority by remember {
+        mutableStateOf("High")
+    }
+
+    var clickedhigh by remember {
+        mutableStateOf(false)
+    }
+    var clickedmed by remember {
+        mutableStateOf(false)
+    }
+    var clickedlow by remember {
+        mutableStateOf(false)
+    }
+
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+
+        Column( horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceAround) {
+            Row{
+                Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color.Red)
+                Text(text = "High")
+            }
+            RadioButton(selected = clickedhigh, onClick =
+            {
+
+                viewModel.updateTaskPriority("High".toString())
+                clickedhigh=true
+                clickedlow=false
+                clickedmed=false
+
+            })
+        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceAround) {
+            Row{
+                Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color.Blue)
+                Text(text = "Medium")
+            }
+            RadioButton(selected = clickedmed, onClick = {
+                viewModel.updateTaskPriority("Medium".toString())
+                clickedmed=true
+                clickedhigh=false
+                clickedlow=false
+            })
+        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceAround) {
+            Row{
+                Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color.Green)
+                Text(text = "Low")
+            }
+            RadioButton(selected = clickedlow, onClick = {
+                viewModel.updateTaskPriority("Low".toString())
+                clickedlow= true
+                clickedhigh=false
+                clickedmed=false
+            })
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -216,3 +281,4 @@ fun timePicker(){
 fun tester(){
     TaskItem(task = Task(1,"Some big task that is supposed to be accomplished with high priority ","High","Some Description","09-03-2024","10:00 AM"),{  })
 }
+
