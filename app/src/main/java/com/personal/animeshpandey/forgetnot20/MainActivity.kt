@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.personal.animeshpandey.forgetnot20.Views.MainView
 import com.personal.animeshpandey.forgetnot20.Views.TaskView
 import com.personal.animeshpandey.forgetnot20.ui.theme.ForgetNot20Theme
 
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    MainView()
                 }
             }
         }

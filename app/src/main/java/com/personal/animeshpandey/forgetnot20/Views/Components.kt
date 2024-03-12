@@ -62,14 +62,15 @@ fun TaskItem(task: Task,onEdit:()->Unit){
     Card(modifier = Modifier
         .fillMaxWidth()
         .background(color = MaterialTheme.colorScheme.primary)
-        .padding(top = 8.dp, start = 8.dp, end = 8.dp))
+        .padding(top = 8.dp, start = 8.dp, end = 8.dp),
+        )
     {
 
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
 
             Row(modifier = Modifier.weight(2f)){
-                mainInfoBar(task = task,onEditButtonClicked = {onEdit()})
+                mainInfoBar(task = task,onEditButtonClicked = onEdit)
             }
 
             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically){
@@ -129,7 +130,7 @@ fun date_time_priority(task:Task){
 fun mainInfoBar( task:Task, onEditButtonClicked:()->Unit){
 
     var expanded by remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     Column( verticalArrangement = Arrangement.SpaceEvenly) {
@@ -138,7 +139,7 @@ fun mainInfoBar( task:Task, onEditButtonClicked:()->Unit){
         }
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
-            Button( onClick = {  }) {
+            Button( onClick =  onEditButtonClicked ) {
                 Icon(modifier = Modifier.size(16.dp),imageVector = Icons.Filled.Edit, contentDescription = "edit")
             }
             Button( onClick = {expanded=!expanded} //Show Description
@@ -161,7 +162,7 @@ fun mainInfoBar( task:Task, onEditButtonClicked:()->Unit){
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row{
-                        Text(stringResource(id = R.string.dummy_description))
+                        Text(task.Description.toString())
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row{
@@ -178,9 +179,9 @@ fun mainInfoBar( task:Task, onEditButtonClicked:()->Unit){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun inputBoxTitle(value:String, onValueChange:(String)->Unit){
+fun inputBoxTitle(viewModel: TaskViewModel, onValueChange:(String)->Unit){
     OutlinedTextField(
-        value = value, onValueChange = onValueChange, maxLines = 2,
+        value = viewModel._TaskTitle, onValueChange = onValueChange, maxLines = 2,
         label = { Text(text = "Edit Task") },
         leadingIcon = {Icon(imageVector = Icons.Default.Edit, contentDescription = null)},
         shape = MaterialTheme.shapes.large
@@ -189,9 +190,9 @@ fun inputBoxTitle(value:String, onValueChange:(String)->Unit){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun inputBoxDescription(value:String, onValueChange:(String)->Unit){
+fun inputBoxDescription(viewModel: TaskViewModel, onValueChange:(String)->Unit){
     OutlinedTextField(
-        value = value, onValueChange = onValueChange,
+        value = viewModel._TaskDescription, onValueChange = onValueChange,
         label = { Text(text = "Edit Description") },
         leadingIcon = {Icon(imageVector = Icons.Default.Edit, contentDescription = null)},
         shape = MaterialTheme.shapes.large
@@ -200,7 +201,7 @@ fun inputBoxDescription(value:String, onValueChange:(String)->Unit){
 
 @ExperimentalMaterial3Api
 @Composable
-fun timePicker(){
+fun timePicker(viewModel: TaskViewModel){
     val PickerState = rememberTimePickerState(10,20,is24Hour = true)
 
     var hours = PickerState.hour.toString()
@@ -212,7 +213,7 @@ fun timePicker(){
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
         TimePicker(state = PickerState)
     }
-
+    viewModel.updateTaskTime(hours+":"+minutes)
 }
 
 @Composable

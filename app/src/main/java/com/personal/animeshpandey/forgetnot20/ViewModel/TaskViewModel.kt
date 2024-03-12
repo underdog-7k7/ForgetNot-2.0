@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class TaskViewModel(private val taskRepository: TaskRepository = Graph.task_repo):ViewModel() {
-     var _TaskTitle by mutableStateOf("Some Task")
+     var _TaskTitle by mutableStateOf("")
      var _TaskDescription by mutableStateOf("Description")
      var _TaskTime by mutableStateOf("00:00")
      var _TaskDate by mutableStateOf("12-12-2023")
